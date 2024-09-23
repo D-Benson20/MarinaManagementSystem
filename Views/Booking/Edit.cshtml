@@ -1,0 +1,39 @@
+﻿@model MarinaManagementSystem.Models.Booking
+
+<h2>Edit Booking</h2>
+
+@{
+    var startMonth = Model.StartDate.ToString("yyyy-MM");
+    var endMonth = Model.EndDate.ToString("yyyy-MM");
+}
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="BookingId" />
+    <input type="hidden" asp-for="CustomerId" />
+
+    <div>
+        <label for="BoatId">Select Boat</label>
+        <select asp-for="BoatId" asp-items="ViewBag.Boats" required>
+            <option value="">-- Select a boat --</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="StartDate">Start Month</label>
+        <input asp-for="StartDate" type="month" value="@startMonth" required />
+    </div>
+
+    <div>
+        <label for="EndDate">End Month</label>
+        <input asp-for="EndDate" type="month" value="@endMonth" required />
+    </div>
+
+    <div>
+        <label for="Details">Details</label>
+        <textarea asp-for="Details"></textarea>
+    </div>
+
+    <button type="submit">Update Booking</button>
+</form>
+
+<a href="@Url.Action("Dashboard", "Customer", new { customerId = Model.CustomerId })">Back to Dashboard</a>

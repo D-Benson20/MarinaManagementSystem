@@ -1,0 +1,37 @@
+﻿@model MarinaManagementSystem.Models.Booking
+
+@{
+    var currentMonth = DateTime.Now.ToString("yyyy-MM");
+}
+
+<h2>Create Booking</h2>
+
+<form asp-action="Create">
+    <input type="hidden" asp-for="CustomerId" />
+
+    <div>
+        <label for="BoatId">Select Boat</label>
+        <select asp-for="BoatId" asp-items="ViewBag.Boats" required>
+            <option value="">-- Select a boat --</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="StartDate">Start Month</label>
+        <input asp-for="StartDate" type="month" value="@currentMonth" required />
+    </div>
+
+    <div>
+        <label for="EndDate">End Month</label>
+        <input asp-for="EndDate" type="month" value="@currentMonth" required />
+    </div>
+
+    <div>
+        <label for="Details">Details</label>
+        <textarea asp-for="Details"></textarea>
+    </div>
+
+    <button type="submit">Create Booking</button>
+</form>
+
+<a href="@Url.Action("Dashboard", "Customer", new { customerId = Model.CustomerId })">Back to Dashboard</a>

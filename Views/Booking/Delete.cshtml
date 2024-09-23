@@ -1,0 +1,27 @@
+﻿@model MarinaManagementSystem.Models.Booking
+
+<h2>Delete Booking</h2>
+
+<p>Are you sure you want to delete this booking?</p>
+
+<div>
+    <strong>Boat:</strong> @Model.Boat.Name
+</div>
+
+<div>
+    <strong>Start Date:</strong> @Model.StartDate.ToShortDateString()
+</div>
+
+<div>
+    <strong>End Date:</strong> @Model.EndDate.ToShortDateString()
+</div>
+
+<div>
+    <strong>Details:</strong> @Model.Details
+</div>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" asp-for="BookingId" />
+    <button type="submit">Yes, Delete</button>
+    <a href="@Url.Action("Dashboard", "Customer", new { customerId = Model.CustomerId })">Back to Dashboard</a>
+</form>

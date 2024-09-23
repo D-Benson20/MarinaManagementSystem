@@ -1,0 +1,87 @@
+﻿@model MarinaManagementSystem.Models.Customer
+
+<h2>Welcome, @Model.Name</h2>
+
+<!-- Customer Details -->
+<div>
+    <h3>Your Details</h3>
+    <p>Email: @Model.Email</p>
+    <p>Phone Number: @Model.PhoneNumber</p>
+    <p>Postcode: @Model.Postcode</p>
+    <p>Member Since: @Model.CreatedAt.ToString("d")</p>
+</div>
+
+<!-- Boats Section -->
+<div>
+    <h3>Your Boats</h3>
+
+    <!-- "Add Boat" option is always available -->
+    <p><a href="@Url.Action("Create", "Boat", new { customerId = Model.CustomerId })">Add a Boat</a></p>
+
+    @if (Model.Boats != null && Model.Boats.Count > 0)
+    {
+        <ul>
+            @foreach (var boat in Model.Boats)
+            {
+                <li>
+                    <strong>@boat.Name</strong> (Length: @boat.Length m)
+                    <a href="@Url.Action("Edit", "Boat", new { id = boat.BoatId })">Edit</a> |
+                    <a href="@Url.Action("Delete", "Boat", new { id = boat.BoatId })" onclick="return confirm('Are you sure you want to delete this boat?');">Delete</a>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No boats added yet.</p>
+    }
+</div>
+
+<!-- Bookings Section -->
+<div>
+    <h3>Your Bookings</h3>
+
+    <!-- "Create Booking" option is always available -->
+    <p><a href="@Url.Action("Create", "Booking", new { customerId = Model.CustomerId })">Create a Booking</a></p>
+
+    @if (Model.Bookings != null && Model.Bookings.Count > 0)
+    {
+        <ul>
+            @foreach (var booking in Model.Bookings)
+            {
+                var boatLength = booking.Boat.Length;
+                var monthlyRate = 51.85m * boatLength;
+
+                // Calculate the total number of months for the booking
+                var totalMonths = ((booking.EndDate.Year - booking.StartDate.Year) * 12) + booking.EndDate.Month - booking.StartDate.Month;
+
+                // Total amount for the booking duration without VAT
+                var totalForBooking = monthlyRate * totalMonths;
+
+                // VAT at 20%
+                var vat = totalForBooking * 0.20m;
+
+                // Total with VAT
+                var totalWithVAT = totalForBooking + vat;
+
+                <li>
+                    <strong>Booking from @booking.StartDate.ToString("d") to @booking.EndDate.ToString("d")</strong>
+                    - @booking.Details (Boat: @booking.Boat.Name, @totalMonths months)
+                    <br />
+                    <!-- Amount without VAT -->
+                    <strong>Amount Billed (for @totalMonths months) without VAT: £@totalForBooking.ToString("0.00")</strong>
+                    <br />
+                    <!-- Amount with VAT -->
+                    <strong>Amount Billed (for @totalMonths months) with VAT: £@totalWithVAT.ToString("0.00")</strong>
+                    <br />
+                    <a href="@Url.Action("Edit", "Booking", new { id = booking.BookingId })">Edit</a> |
+                    <a href="@Url.Action("Delete", "Booking", new { id = booking.BookingId })" onclick="return confirm('Are you sure you want to delete this booking?');">Delete</a>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No bookings found yet.</p>
+    }
+</div>
